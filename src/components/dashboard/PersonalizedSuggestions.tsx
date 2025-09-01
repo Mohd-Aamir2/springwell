@@ -1,6 +1,9 @@
-import { getPersonalizedResourceSuggestions, PersonalizedResourceSuggestionsInput } from "@/ai/flows/personalized-resource-suggestions";
+'use client';
+
+import { getPersonalizedResourceSuggestions, PersonalizedResourceSuggestionsInput, PersonalizedResourceSuggestionsOutput } from "@/ai/flows/personalized-resource-suggestions";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Lightbulb } from "lucide-react";
+import { useEffect, useState } from "react";
 
 // Mock data for demonstration purposes
 const mockInput: PersonalizedResourceSuggestionsInput = {
@@ -17,12 +20,37 @@ const mockInput: PersonalizedResourceSuggestionsInput = {
 };
 
 
-export async function PersonalizedSuggestions() {
-  let suggestionsOutput;
-  try {
-     suggestionsOutput = await getPersonalizedResourceSuggestions(mockInput);
-  } catch(e) {
-    console.error("Error fetching personalized suggestions", e);
+export function PersonalizedSuggestions() {
+  const [suggestionsOutput, setSuggestionsOutput] = useState<PersonalizedResourceSuggestionsOutput | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      try {
+        const output = await getPersonalizedResourceSuggestions(mockInput);
+        setSuggestionsOutput(output);
+      } catch (e) {
+        console.error("Error fetching personalized suggestions", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSuggestions();
+  }, []);
+
+  if (loading) {
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2 font-headline"><Lightbulb className="text-accent"/> For You</CardTitle>
+                <CardDescription>Suggestions based on your activity.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <p className="text-sm text-muted-foreground">Loading suggestions...</p>
+            </CardContent>
+        </Card>
+    );
   }
   
   if (!suggestionsOutput || suggestionsOutput.suggestions.length === 0) {
