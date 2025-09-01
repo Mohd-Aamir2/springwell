@@ -1,7 +1,6 @@
 'use client';
 
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Cell } from 'recharts';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { useEffect, useState } from 'react';
 
@@ -71,7 +70,7 @@ export function MoodChart() {
                 <Tooltip
                     cursor={false}
                     content={<ChartTooltipContent
-                        formatter={(value, name, props) => (
+                        formatter={(value: any, name: any, props: any) => (
                             <div className="flex flex-col">
                                 <span className="font-semibold">{moodMapping[value as number]?.label}</span>
                                 <span className="text-xs text-muted-foreground">{props.payload.date}</span>
