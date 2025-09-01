@@ -2,7 +2,7 @@
 
 import { getPersonalizedResourceSuggestions, PersonalizedResourceSuggestionsInput, PersonalizedResourceSuggestionsOutput } from "@/ai/flows/personalized-resource-suggestions";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Lightbulb } from "lucide-react";
+import { Lightbulb, AlertTriangle } from "lucide-react";
 import { useEffect, useState } from "react";
 
 // Mock data for demonstration purposes
@@ -23,14 +23,18 @@ const mockInput: PersonalizedResourceSuggestionsInput = {
 export function PersonalizedSuggestions() {
   const [suggestionsOutput, setSuggestionsOutput] = useState<PersonalizedResourceSuggestionsOutput | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchSuggestions = async () => {
       try {
+        setError(null);
+        setLoading(true);
         const output = await getPersonalizedResourceSuggestions(mockInput);
         setSuggestionsOutput(output);
       } catch (e) {
         console.error("Error fetching personalized suggestions", e);
+        setError("We couldn't load your suggestions right now. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -48,6 +52,20 @@ export function PersonalizedSuggestions() {
             </CardHeader>
             <CardContent>
                 <p className="text-sm text-muted-foreground">Loading suggestions...</p>
+            </CardContent>
+        </Card>
+    );
+  }
+
+  if (error) {
+    return (
+        <Card className="border-destructive/50">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2 font-headline text-destructive"><AlertTriangle/> Suggestions Error</CardTitle>
+                <CardDescription>We had trouble fetching your personalized tips.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <p className="text-sm text-destructive">{error}</p>
             </CardContent>
         </Card>
     );
