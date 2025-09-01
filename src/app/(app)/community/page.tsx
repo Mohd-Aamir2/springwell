@@ -15,15 +15,15 @@ type Post = {
 };
 
 const initialPosts: Post[] = [
-  { id: 1, user: getAnonymousUser(), title: "Stressed about finals?", category: "Academics", replies: 12, lastActivity: "5m ago" },
-  { id: 2, user: getAnonymousUser(), title: "How to make friends in lectures?", category: "Social Life", replies: 8, lastActivity: "22m ago" },
-  { id: 3, user: getAnonymousUser(), title: "I can't sleep, anyone else?", category: "Health & Wellness", replies: 25, lastActivity: "1h ago" },
-  { id: 4, user: getAnonymousUser(), title: "Feeling homesick this semester", category: "Personal", replies: 15, lastActivity: "3h ago" },
-  { id: 5, user: getAnonymousUser(), title: "Tips for dealing with roommate issues?", category: "Campus Life", replies: 5, lastActivity: "8h ago" },
+  { id: 1, user: { name: "", avatar: "" }, title: "Stressed about finals?", category: "Academics", replies: 12, lastActivity: "5m ago" },
+  { id: 2, user: { name: "", avatar: "" }, title: "How to make friends in lectures?", category: "Social Life", replies: 8, lastActivity: "22m ago" },
+  { id: 3, user: { name: "", avatar: "" }, title: "I can't sleep, anyone else?", category: "Health & Wellness", replies: 25, lastActivity: "1h ago" },
+  { id: 4, user: { name: "", avatar: "" }, title: "Feeling homesick this semester", category: "Personal", replies: 15, lastActivity: "3h ago" },
+  { id: 5, user: { name: "", avatar: "" }, title: "Tips for dealing with roommate issues?", category: "Campus Life", replies: 5, lastActivity: "8h ago" },
 ];
 
 export default function CommunityPage() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<Post[]>(initialPosts);
 
   useEffect(() => {
     // We generate users on the client to avoid hydration mismatches

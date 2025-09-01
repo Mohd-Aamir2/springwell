@@ -1,15 +1,16 @@
 'use client';
 
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Cell } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
+import { useEffect, useState } from 'react';
 
-const moodData = Array.from({ length: 30 }, (_, i) => {
+const initialMoodData = Array.from({ length: 30 }, (_, i) => {
   const date = new Date();
   date.setDate(date.getDate() - (29 - i));
   return {
     date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-    moodScore: Math.floor(Math.random() * 5) + 1, // 1-5 scale
+    moodScore: 0, 
   };
 });
 
@@ -27,7 +28,27 @@ const chartConfig = {
   },
 };
 
+type MoodData = {
+    date: string;
+    moodScore: number;
+}
+
 export function MoodChart() {
+    const [moodData, setMoodData] = useState<MoodData[]>(initialMoodData);
+    
+    useEffect(() => {
+        setMoodData(
+            Array.from({ length: 30 }, (_, i) => {
+                const date = new Date();
+                date.setDate(date.getDate() - (29 - i));
+                return {
+                    date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                    moodScore: Math.floor(Math.random() * 5) + 1, // 1-5 scale
+                };
+            })
+        );
+    }, []);
+
   return (
     <div className="h-64 w-full">
         <ChartContainer config={chartConfig} className="w-full h-full">
@@ -60,7 +81,7 @@ export function MoodChart() {
                 />
                 <Bar dataKey="moodScore" radius={4}>
                 {moodData.map((entry, index) => (
-                    <rect key={`cell-${index}`} fill={moodMapping[entry.moodScore]?.color} />
+                    <Cell key={`cell-${index}`} fill={moodMapping[entry.moodScore]?.color || '#ccc'} />
                 ))}
                 </Bar>
             </BarChart>
