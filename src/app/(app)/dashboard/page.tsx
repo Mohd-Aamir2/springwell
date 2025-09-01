@@ -1,11 +1,14 @@
+'use client';
+
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BrainCircuit, Users, MessageSquareHeart } from "lucide-react";
+import { BrainCircuit, Users, MessageSquareHeart, LogOut } from "lucide-react";
 import Link from "next/link";
 import { MoodCheckIn } from "@/components/dashboard/MoodCheckIn";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import Image from "next/image";
 import { PersonalizedSuggestions } from "@/components/dashboard/PersonalizedSuggestions";
+import { useRouter } from "next/navigation";
 
 const quickActions = [
   {
@@ -35,11 +38,23 @@ const featuredResources = [
 ];
 
 export default function DashboardPage() {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    router.push('/');
+  };
+
   return (
     <div className="container mx-auto p-4 sm:p-0">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold font-headline">Hello, Alex! 👋</h1>
-        <p className="text-muted-foreground">Welcome back to your safe space.</p>
+      <header className="mb-8 flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold font-headline">Hello, Alex! 👋</h1>
+          <p className="text-muted-foreground">Welcome back to your safe space.</p>
+        </div>
+        <Button variant="outline" onClick={handleLogout}>
+          <LogOut className="mr-2 h-4 w-4" />
+          Sign Out
+        </Button>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
